@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Sidtitel och beskrivning -->
+    <title>Interaktivt Diskussionsspel – kultur och samverkan i arbetsgrupper</title>
+    <meta name="description" content="Ett interaktivt diskussionsspel med scenarier om kulturella olikheter och utmaningar i arbetsgrupper. Slumpade fall och inbyggd timer för strukturerade samtal.">
+
+    <!-- Delningstaggar (uppdatera adressen efter publicering, se README) -->
+    <meta property="og:title" content="Interaktivt Diskussionsspel">
+    <meta property="og:description" content="Scenarier om kultur och samverkan i arbetsgrupper, med inbyggd timer för strukturerade samtal.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://DIN-ADRESS/">
+    <meta property="og:image" content="https://DIN-ADRESS/background.jpg">
+    <link rel="canonical" href="https://DIN-ADRESS/">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 id="title">Interaktivt Diskussionsspel</h1>
+            <p id="description">Diskutera kulturella olikheter och utmaningar i arbetsgrupper</p>
+        </header>
+
+        <main>
+            <div id="scenario-container">
+                <h2 id="scenario-title"></h2>
+                <p id="scenario-text"></p>
+            </div>
+
+            <div id="timer-container" class="hidden">
+                <div id="timer-display">00:00</div>
+                <div class="timer-controls">
+                    <button id="timer-start">Starta timer</button>
+                    <button id="timer-reset">Återställ</button>
+                </div>
+                <div class="timer-settings">
+                    <label for="timer-minutes">Välj tid (minuter):</label>
+                    <select id="timer-minutes">
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5" selected>5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button id="prev-btn">Föregående</button>
+                <button id="timer-toggle">Visa timer</button>
+                <button id="next-btn">Nästa</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="scenarios.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

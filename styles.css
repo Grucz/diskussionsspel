@@ -1,0 +1,234 @@
+/* Grundläggande stilar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url('background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Header-stilar */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: #1A365D;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+header p {
+    color: #3A2921;
+    font-size: 1.2rem;
+}
+
+/* Scenario-stilar */
+#scenario-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 30px;
+    min-height: 200px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+#scenario-title {
+    color: #1A365D;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+#scenario-text {
+    color: #3A2921;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* Timer-stilar */
+#timer-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+#timer-display {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #1A365D;
+    margin-bottom: 15px;
+}
+
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.timer-settings {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.timer-settings label {
+    color: #3A2921;
+}
+
+.timer-settings select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Navigeringsstilar */
+.navigation {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+button {
+    background-color: #1A365D;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    background-color: #2a4a7c;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+#timer-toggle {
+    background-color: #3A2921;
+}
+
+#timer-toggle:hover {
+    background-color: #4a3931;
+}
+
+/* Hjälpklasser */
+.hidden {
+    display: none;
+}
+
+.timer-alert {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        background-color: #1A365D;
+    }
+    50% {
+        background-color: #c53030;
+    }
+    100% {
+        background-color: #1A365D;
+    }
+}
+
+/* Responsiv design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    header p {
+        font-size: 1rem;
+    }
+    
+    #scenario-title {
+        font-size: 1.5rem;
+    }
+    
+    #scenario-text {
+        font-size: 1rem;
+    }
+    
+    .navigation {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    button {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.1rem;
+    }
+    
+    #timer-display {
+        font-size: 2rem;
+    }
+    
+    .timer-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .timer-controls button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    #scenario-container {
+        padding: 15px;
+        min-height: 150px;
+    }
+}
+
