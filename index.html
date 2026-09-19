@@ -31,31 +31,37 @@
                 <p id="scenario-text"></p>
             </div>
 
-            <div id="timer-container" class="hidden">
-                <div id="timer-display">00:00</div>
+            <div class="navigation">
+                <button id="prev-btn">Föregående</button>
+                <button id="next-btn">Nästa</button>
+            </div>
+
+            <div id="timer-container">
+                <div class="timer-top">
+                    <span id="timer-display">05:00</span>
+                    <div class="timer-settings">
+                        <label for="timer-minutes">Tid (min):</label>
+                        <select id="timer-minutes">
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5" selected>5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="timer-bar-track">
+                    <div class="timer-bar-fill" id="timer-bar-fill"></div>
+                </div>
+
                 <div class="timer-controls">
                     <button id="timer-start">Starta timer</button>
                     <button id="timer-reset">Återställ</button>
                 </div>
-                <div class="timer-settings">
-                    <label for="timer-minutes">Välj tid (minuter):</label>
-                    <select id="timer-minutes">
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5" selected>5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="navigation">
-                <button id="prev-btn">Föregående</button>
-                <button id="timer-toggle">Visa timer</button>
-                <button id="next-btn">Nästa</button>
             </div>
         </main>
     </div>

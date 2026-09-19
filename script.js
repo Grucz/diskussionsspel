@@ -1,37 +1,49 @@
 // Globala variabler
 let currentScenarioIndex = -1;
 let usedScenarios = [];
+let started = false;          // Har spelet lämnat startläget?
 let timerInterval;
 let timerSeconds = 0;
+let timerTotalSeconds = 0;    // Vald tid, för att räkna ut stapelns bredd
 let timerRunning = false;
+
+const START_TEXT = "Klicka på Nästa för att slumpa fram ett scenario.";
 
 // DOM-element
 const scenarioTitle = document.getElementById('scenario-title');
 const scenarioText = document.getElementById('scenario-text');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
-const timerToggle = document.getElementById('timer-toggle');
-const timerContainer = document.getElementById('timer-container');
 const timerDisplay = document.getElementById('timer-display');
+const timerBarFill = document.getElementById('timer-bar-fill');
 const timerStart = document.getElementById('timer-start');
 const timerReset = document.getElementById('timer-reset');
 const timerMinutes = document.getElementById('timer-minutes');
 
 // Initialisera webbsidan
 document.addEventListener('DOMContentLoaded', () => {
-    // Visa första scenariot
-    showNextScenario();
-    
+    // Visa starttext i stället för ett scenario
+    showStartText();
+
+    // Ställ in timern i viloläge (visar vald tid, full stapel)
+    resetTimer();
+
     // Lägg till händelselyssnare för knappar
     nextBtn.addEventListener('click', showNextScenario);
     prevBtn.addEventListener('click', showPreviousScenario);
-    timerToggle.addEventListener('click', toggleTimer);
     timerStart.addEventListener('click', startTimer);
     timerReset.addEventListener('click', resetTimer);
-    
-    // Inaktivera föregående-knappen i början
+    timerMinutes.addEventListener('change', resetTimer);
+
+    // Föregående-knappen är inaktiv tills ett scenario visats
     prevBtn.disabled = true;
 });
+
+// Funktion för att visa startläget
+function showStartText() {
+    scenarioTitle.textContent = "";
+    scenarioText.textContent = START_TEXT;
+}
 
 // Funktion för att visa nästa scenario
 function showNextScenario() {
@@ -39,26 +51,28 @@ function showNextScenario() {
     if (timerRunning) {
         resetTimer();
     }
-    
+
+    started = true;
+
     // Om alla scenarier har visats
     if (usedScenarios.length === scenarios.length) {
         showCompletionMessage();
         return;
     }
-    
+
     // Välj ett slumpmässigt scenario som inte har visats tidigare
     let randomIndex;
     do {
         randomIndex = Math.floor(Math.random() * scenarios.length);
     } while (usedScenarios.includes(randomIndex));
-    
+
     // Lägg till det valda scenariot i listan över använda scenarier
     usedScenarios.push(randomIndex);
     currentScenarioIndex = usedScenarios.length - 1;
-    
+
     // Visa scenariot
     displayScenario(randomIndex);
-    
+
     // Uppdatera knapparnas tillstånd
     updateButtonStates();
 }
@@ -69,13 +83,13 @@ function showPreviousScenario() {
     if (timerRunning) {
         resetTimer();
     }
-    
+
     // Minska index och visa scenariot
     currentScenarioIndex--;
-    
+
     // Visa scenariot
     displayScenario(usedScenarios[currentScenarioIndex]);
-    
+
     // Uppdatera knapparnas tillstånd
     updateButtonStates();
 }
@@ -98,26 +112,12 @@ function showCompletionMessage() {
     scenarioTitle.textContent = "Färdig";
     scenarioText.textContent = "Alla scenarier har visats. Tack för att du deltog i diskussionsspelet!";
     nextBtn.disabled = true;
+    prevBtn.disabled = currentScenarioIndex <= 0;
 }
 
-// Funktion för att visa/dölja timer
-function toggleTimer() {
-    if (timerContainer.classList.contains('hidden')) {
-        timerContainer.classList.remove('hidden');
-        timerToggle.textContent = 'Dölj timer';
-    } else {
-        timerContainer.classList.add('hidden');
-        timerToggle.textContent = 'Visa timer';
-        // Stoppa timern om den är igång
-        if (timerRunning) {
-            resetTimer();
-        }
-    }
-}
-
-// Funktion för att starta timern
+// Funktion för att starta/pausa timern
 function startTimer() {
-    // Om timern redan är igång, stoppa den
+    // Om timern redan är igång, pausa den
     if (timerRunning) {
         clearInterval(timerInterval);
         timerRunning = false;
@@ -125,35 +125,40 @@ function startTimer() {
         timerDisplay.classList.remove('timer-alert');
         return;
     }
-    
-    // Sätt tiden baserat på valt värde
-    const minutes = parseInt(timerMinutes.value);
-    timerSeconds = minutes * 60;
-    
-    // Uppdatera display
+
+    // Om ingen tid är kvar (t.ex. efter avslutad nedräkning), börja om
+    if (timerSeconds <= 0) {
+        const minutes = parseInt(timerMinutes.value);
+        timerTotalSeconds = minutes * 60;
+        timerSeconds = timerTotalSeconds;
+    }
+
+    // Uppdatera display och stapel
+    timerDisplay.classList.remove('timer-alert');
     updateTimerDisplay();
-    
+    updateTimerBar();
+
     // Starta nedräkning
     timerRunning = true;
     timerStart.textContent = 'Pausa timer';
-    
+
     timerInterval = setInterval(() => {
         timerSeconds--;
-        
+
         // Om tiden är slut
         if (timerSeconds <= 0) {
+            timerSeconds = 0;
             clearInterval(timerInterval);
             timerRunning = false;
             timerStart.textContent = 'Starta timer';
+            updateTimerDisplay();
+            updateTimerBar();
             timerDisplay.classList.add('timer-alert');
-            
-            // Spela en ljudsignal (valfritt)
-            // playAlertSound();
-            
             return;
         }
-        
+
         updateTimerDisplay();
+        updateTimerBar();
     }, 1000);
 }
 
@@ -163,20 +168,41 @@ function resetTimer() {
     timerRunning = false;
     timerStart.textContent = 'Starta timer';
     timerDisplay.classList.remove('timer-alert');
-    
+
     // Återställ tiden baserat på valt värde
     const minutes = parseInt(timerMinutes.value);
-    timerSeconds = minutes * 60;
-    
+    timerTotalSeconds = minutes * 60;
+    timerSeconds = timerTotalSeconds;
+
     // Uppdatera display
     updateTimerDisplay();
+
+    // Snäpp tillbaka stapeln till full utan att animera glidningen
+    timerBarFill.style.transition = 'none';
+    updateTimerBar();
+    // Tvinga fram omritning och slå på övergången igen
+    void timerBarFill.offsetWidth;
+    timerBarFill.style.transition = '';
 }
 
 // Funktion för att uppdatera timer-displayen
 function updateTimerDisplay() {
     const minutes = Math.floor(timerSeconds / 60);
     const seconds = timerSeconds % 60;
-    
+
     timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
+// Funktion för att uppdatera stapelns bredd och färg
+function updateTimerBar() {
+    const fraction = timerTotalSeconds > 0 ? timerSeconds / timerTotalSeconds : 0;
+    timerBarFill.style.width = `${fraction * 100}%`;
+
+    // Skifta färg mot slutet
+    timerBarFill.classList.remove('warning', 'danger');
+    if (fraction <= 0.15) {
+        timerBarFill.classList.add('danger');
+    } else if (fraction <= 0.5) {
+        timerBarFill.classList.add('warning');
+    }
+}
